@@ -7,12 +7,15 @@ using System.Text;
 
 namespace Pong
 {
-    class Sprite
+    public class Sprite
     {
 
         private Texture2D _texture;
         public Vector2 _position;
-        public float speed = 2;
+        public float linearVelocity = 2f;
+
+
+        public Input input;
 
         public Sprite(Texture2D texture)
         {
@@ -26,30 +29,43 @@ namespace Pong
 
         public void Update(GraphicsDeviceManager _graphics)
         {
+            
+
+            Move();
+
+            //if (_position.X > _graphics.PreferredBackBufferWidth - _texture.Width / 2)
+            //    _position.X = _graphics.PreferredBackBufferWidth - _texture.Width / 2;
+            //else if (_position.X < _texture.Width / 2)
+            //    _position.X = _texture.Width / 2;
+
+            //if (_position.Y > _graphics.PreferredBackBufferHeight - _texture.Height / 2)
+            //    _position.Y = _graphics.PreferredBackBufferHeight - _texture.Height / 2;
+            //else if (_position.Y < _texture.Height / 2)
+            //    _position.Y = _texture.Height / 2;
+        }
+
+        private void Move()
+        {
+            if (input == null)
+                return;
+
             var kstate = Keyboard.GetState();
 
-            if (kstate.IsKeyDown(Keys.Up))
-                _position.Y -= speed;
+            if (kstate.IsKeyDown(input.Up))
+                _position.Y -= linearVelocity;
 
-            if (kstate.IsKeyDown(Keys.Down))
-                _position.Y += speed;
+            if (kstate.IsKeyDown(input.Down))
+                _position.Y += linearVelocity;
 
-            if (kstate.IsKeyDown(Keys.Left))
-                _position.X -= speed;
+            if (kstate.IsKeyDown(input.Left))
+                _position.X -= linearVelocity;
 
-            if (kstate.IsKeyDown(Keys.Right))
-                _position.X += speed;
+            if (kstate.IsKeyDown(input.Right))
+                _position.X += linearVelocity;
 
-            if (_position.X > _graphics.PreferredBackBufferWidth - _texture.Width / 2)
-                _position.X = _graphics.PreferredBackBufferWidth - _texture.Width / 2;
-            else if (_position.X < _texture.Width / 2)
-                _position.X = _texture.Width / 2;
-
-            if (_position.Y > _graphics.PreferredBackBufferHeight - _texture.Height / 2)
-                _position.Y = _graphics.PreferredBackBufferHeight - _texture.Height / 2;
-            else if (_position.Y < _texture.Height / 2)
-                _position.Y = _texture.Height / 2;
         }
+
+
 
         public void Draw(SpriteBatch _spriteBatch)
         {
