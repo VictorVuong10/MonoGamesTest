@@ -5,29 +5,19 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Pong
+namespace Pong.Sprites
 {
-    public class Sprite
+    public class SpriteRotate : Sprite
     {
-
-        private Texture2D _texture;
-        public Vector2 _position;
         public float linearVelocity = 2f;
+        public float rotationVelocity = 4f;
 
 
         public Input input;
 
-        public Sprite(Texture2D texture)
-        {
-            _texture = texture;
-        }
-        public Sprite(Texture2D texture, Vector2 position)
-        {
-            _texture = texture;
-            _position = position;
-        }
+        public SpriteRotate(Texture2D texture) : base(texture){}
 
-        public void Update(GraphicsDeviceManager _graphics)
+        public override void Update(GraphicsDeviceManager _graphics, GameTime gameTime, List<Sprite> sprites)
         {
             
 
@@ -51,25 +41,17 @@ namespace Pong
 
             var kstate = Keyboard.GetState();
 
-            if (kstate.IsKeyDown(input.Up))
-                _position.Y -= linearVelocity;
-
-            if (kstate.IsKeyDown(input.Down))
-                _position.Y += linearVelocity;
-
             if (kstate.IsKeyDown(input.Left))
-                _position.X -= linearVelocity;
+                rotation -= MathHelper.ToRadians(rotationVelocity);
+            else if (kstate.IsKeyDown(input.Right))
+                rotation += MathHelper.ToRadians(rotationVelocity);
 
-            if (kstate.IsKeyDown(input.Right))
-                _position.X += linearVelocity;
+            var direction = new Vector2((float)Math.Cos(rotation), (float)Math.Sin(rotation));
 
-        }
-
-
-
-        public void Draw(SpriteBatch _spriteBatch)
-        {
-            _spriteBatch.Draw(_texture, _position, null, Color.White, 0f, new Vector2(_texture.Width / 2, _texture.Width / 2), Vector2.One, SpriteEffects.None, 0f);
+            if (kstate.IsKeyDown(input.Up))
+                _position += direction * linearVelocity;
+            else if (kstate.IsKeyDown(input.Down))
+                _position -= direction * linearVelocity;
         }
     }
 }

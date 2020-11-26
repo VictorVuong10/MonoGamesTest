@@ -12,5 +12,7 @@ namespace Pong
         public Keys Down { get; set; }
         public Keys Up { get; set; }
 
+        public Keys Shoot { get; set; }
+
     }
 }

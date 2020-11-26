@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Pong.Sprites;
 using System.Collections.Generic;
 
 namespace Pong
@@ -40,24 +41,30 @@ namespace Pong
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             var ballTexture = Content.Load<Texture2D>("ball");
+            var ball2Texture = Content.Load<Texture2D>("frontball");
+            var bullet = Content.Load<Texture2D>("bullet");
 
             spriteList = new List<Sprite>()
             {
 
-                new Sprite(ballTexture, new Vector2(_graphics.PreferredBackBufferWidth / 2, _graphics.PreferredBackBufferHeight / 2))
+                //new SpriteLinear(ballTexture)
+                //{
+                //    input = new Input() {Up = Keys.Up, Down = Keys.Down, Left = Keys.Left, Right = Keys.Right},
+                //     origin = new Vector2(ball2Texture.Width / 2, ball2Texture.Width / 2),
+                //    _position = new Vector2(_graphics.PreferredBackBufferWidth / 2, _graphics.PreferredBackBufferHeight / 2),
+                //},
+                new SpriteShoot(ball2Texture)
                 {
-                    input = new Input() {Up = Keys.Up, Down = Keys.Down, Left = Keys.Left, Right = Keys.Right},
-                },
-                new Sprite(ballTexture, new Vector2(_graphics.PreferredBackBufferWidth / 3, _graphics.PreferredBackBufferHeight / 3))
-                {
-                    linearVelocity = 1,
-                    input = new Input() {Up = Keys.W, Down = Keys.S, Left = Keys.A, Right = Keys.D},
+                    linearVelocity = 1f,
+                    input = new Input() {Up = Keys.W, Down = Keys.S, Left = Keys.A, Right = Keys.D, Shoot = Keys.Space},
+                    origin = new Vector2(ball2Texture.Width / 2, ball2Texture.Width / 2),
+                    _position = new Vector2(_graphics.PreferredBackBufferWidth / 3, _graphics.PreferredBackBufferHeight / 3),
+                    projectile = new Projectile(bullet),
                 },
 
 
         };
             // TODO: use this.Content to load your game content here
-            //ballTexture = Content.Load<Texture2D>("ball");
         }
 
         protected override void Update(GameTime gameTime)
@@ -65,34 +72,24 @@ namespace Pong
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
-            //var kstate = Keyboard.GetState();
+            foreach (var sprite in spriteList.ToArray())
+                sprite.Update(_graphics, gameTime, spriteList);
 
-            //if (kstate.IsKeyDown(Keys.Up))
-            //    ballPos.Y -= ballSpd * (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-            //if (kstate.IsKeyDown(Keys.Down))
-            //    ballPos.Y += ballSpd * (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-            //if (kstate.IsKeyDown(Keys.Left))
-            //    ballPos.X -= ballSpd * (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-            //if (kstate.IsKeyDown(Keys.Right))
-            //    ballPos.X += ballSpd * (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-            ////if (ballPos.X > _graphics.PreferredBackBufferWidth - ballTexture.Width / 2)
-            ////    ballPos.X = _graphics.PreferredBackBufferWidth - ballTexture.Width / 2;
-            ////else if (ballPos.X < ballTexture.Width / 2)
-            ////    ballPos.X = ballTexture.Width / 2;
-
-            //if (ballpos.y > _graphics.preferredbackbufferheight - balltexture.height / 2)
-            //    ballpos.y = _graphics.preferredbackbufferheight - balltexture.height / 2;
-            //else if (ballpos.y < balltexture.height / 2)
-            //    ballpos.y = balltexture.height / 2;
-            foreach (var sprite in spriteList)
-                sprite.Update(_graphics);
+            postUpdate();
 
             base.Update(gameTime);
+        }
+
+        private void postUpdate()
+        {
+            for (int i = 0; i < spriteList.Count; i++)
+            {
+                if (spriteList[i].isRemoved)
+                {
+                    spriteList.RemoveAt(i);
+                    i--;
+                }
+            }
         }
 
         protected override void Draw(GameTime gameTime)
@@ -104,7 +101,6 @@ namespace Pong
             foreach (var sprite in spriteList)
                 sprite.Draw(_spriteBatch);
 
-            //_spriteBatch.Draw(ball, null, Color.White, 0f, new Vector2(ball.getWidth() / 2, ball.getHeight() / 2), Vector2.One, SpriteEffects.None, 0f) ;
             _spriteBatch.End();
 
             // TODO: Add your drawing code here
