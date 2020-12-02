@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Pong.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -72,6 +73,7 @@ namespace Pong.Sprites
             bullet._position = this._position;
             bullet.LifeSpan = 2f;
             bullet.Parent = this;
+            bullet.rotation = rotation;
 
             sprites.Add(bullet);
         }

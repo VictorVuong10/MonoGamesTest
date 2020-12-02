@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Pong
+namespace Pong.Models
 {
     public class Input
     {

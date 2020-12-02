@@ -4,11 +4,12 @@ using Microsoft.Xna.Framework.Input;
 using Pong.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace Pong.Sprites
 {
-    public class SpriteRotate : Sprite
+    public class SpriteRotateTarget : Sprite
     {
         public float linearVelocity = 2f;
         public float rotationVelocity = 4f;
@@ -16,7 +17,7 @@ namespace Pong.Sprites
 
         public Input input;
 
-        public SpriteRotate(Texture2D texture) : base(texture){}
+        public SpriteRotateTarget(Texture2D texture) : base(texture){}
 
         public override void Update(GraphicsDeviceManager _graphics, GameTime gameTime, List<Sprite> sprites)
         {
@@ -24,15 +25,18 @@ namespace Pong.Sprites
 
             Move();
 
-            //if (_position.X > _graphics.PreferredBackBufferWidth - _texture.Width / 2)
-            //    _position.X = _graphics.PreferredBackBufferWidth - _texture.Width / 2;
-            //else if (_position.X < _texture.Width / 2)
-            //    _position.X = _texture.Width / 2;
-
-            //if (_position.Y > _graphics.PreferredBackBufferHeight - _texture.Height / 2)
-            //    _position.Y = _graphics.PreferredBackBufferHeight - _texture.Height / 2;
-            //else if (_position.Y < _texture.Height / 2)
-            //    _position.Y = _texture.Height / 2;
+            foreach (var sprite in sprites)
+            {
+                if (sprite is Projectile)
+                {
+                    if(sprite.rectangle.Intersects(this.rectangle))
+                    {
+                        Debug.WriteLine(this._position);
+                        this.isRemoved = true;
+                        sprite.isRemoved = true;
+                    }
+                }
+            }
         }
 
         private void Move()

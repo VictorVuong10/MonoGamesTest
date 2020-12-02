@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Pong.Models;
 using Pong.Sprites;
 using System.Collections.Generic;
 
@@ -42,24 +43,24 @@ namespace Pong
 
             var ballTexture = Content.Load<Texture2D>("ball");
             var ball2Texture = Content.Load<Texture2D>("frontball");
+            var square = Content.Load<Texture2D>("Square");
             var bullet = Content.Load<Texture2D>("bullet");
 
             spriteList = new List<Sprite>()
             {
 
-                //new SpriteLinear(ballTexture)
-                //{
-                //    input = new Input() {Up = Keys.Up, Down = Keys.Down, Left = Keys.Left, Right = Keys.Right},
-                //     origin = new Vector2(ball2Texture.Width / 2, ball2Texture.Width / 2),
-                //    _position = new Vector2(_graphics.PreferredBackBufferWidth / 2, _graphics.PreferredBackBufferHeight / 2),
-                //},
-                new SpriteShoot(ball2Texture)
+                new Square(square)
                 {
-                    linearVelocity = 1f,
+                    input = new Input() {Up = Keys.Up, Down = Keys.Down, Left = Keys.Left, Right = Keys.Right},
+                    _position = new Vector2(400, 240),
+                    color = Color.Green,
+                    speed = 267f
+                },
+                new Square(square)
+                {
                     input = new Input() {Up = Keys.W, Down = Keys.S, Left = Keys.A, Right = Keys.D, Shoot = Keys.Space},
-                    origin = new Vector2(ball2Texture.Width / 2, ball2Texture.Width / 2),
                     _position = new Vector2(_graphics.PreferredBackBufferWidth / 3, _graphics.PreferredBackBufferHeight / 3),
-                    projectile = new Projectile(bullet),
+                    color = Color.Yellow
                 },
 
 
