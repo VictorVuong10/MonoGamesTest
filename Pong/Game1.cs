@@ -15,12 +15,18 @@ namespace Pong
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         private List<Sprite> spriteList;
+        public static int ScreenWidth;
+
+        public static int ScreenHeight;
 
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+            ScreenHeight = _graphics.PreferredBackBufferHeight;
+            ScreenWidth = _graphics.PreferredBackBufferWidth;
+
         }
 
         protected override void Initialize()
@@ -38,7 +44,11 @@ namespace Pong
 
         protected override void LoadContent()
         {
-            
+            var animations = new Dictionary<string, Animation>()
+            {
+                {"Idle", new Animation(Content.Load<Texture2D>("Players/Pink_Monster_Idle_4"), 4) {FrameSpeed = 0.2f } },
+                {"Walk", new Animation(Content.Load<Texture2D>("Players/Pink_Monster_Run_6"), 6) {FrameSpeed = 0.1f} }
+            };
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             var ballTexture = Content.Load<Texture2D>("ball");
@@ -48,20 +58,25 @@ namespace Pong
 
             spriteList = new List<Sprite>()
             {
-
-                new Square(square)
+                new Pink(animations)
                 {
                     input = new Input() {Up = Keys.Up, Down = Keys.Down, Left = Keys.Left, Right = Keys.Right},
                     _position = new Vector2(400, 240),
-                    color = Color.Green,
                     speed = 267f
-                },
-                new Square(square)
-                {
-                    input = new Input() {Up = Keys.W, Down = Keys.S, Left = Keys.A, Right = Keys.D, Shoot = Keys.Space},
-                    _position = new Vector2(_graphics.PreferredBackBufferWidth / 3, _graphics.PreferredBackBufferHeight / 3),
-                    color = Color.Yellow
-                },
+                }
+                //new Square(square)
+                //{
+                //    input = new Input() {Up = Keys.Up, Down = Keys.Down, Left = Keys.Left, Right = Keys.Right},
+                //    _position = new Vector2(400, 240),
+                //    color = Color.Green,
+                //    speed = 267f
+                //},
+                //new Square(square)
+                //{
+                //    input = new Input() {Up = Keys.W, Down = Keys.S, Left = Keys.A, Right = Keys.D, Shoot = Keys.Space},
+                //    _position = new Vector2(_graphics.PreferredBackBufferWidth / 3, _graphics.PreferredBackBufferHeight / 3),
+                //    color = Color.Yellow
+                //},
 
 
         };

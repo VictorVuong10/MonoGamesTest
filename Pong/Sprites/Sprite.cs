@@ -1,21 +1,40 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Pong.Managers;
+using Pong.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Pong.Sprites
 {
     public class Sprite : ICloneable
     {
-
+        #region Fields
         protected Texture2D _texture;
         public Vector2 _position;
+        protected Dictionary<string, Animation> _animations;
+        protected AnimationManager _animationManager;
+        #endregion
+
         public Vector2 velocity;
         public Vector2 origin;
         public float rotation;
         public Color color =  Color.White;
+        
+        public Vector2 Position
+        {
+            get { return _position; }
+            set
+            {
+                _position = value;
+                if (_animationManager != null)
+                    _animationManager.Position = _position;
+            }
+        }
+
 
         public Sprite Parent;
 
@@ -30,6 +49,12 @@ namespace Pong.Sprites
             {
                 return new Rectangle((int)_position.X, (int)_position.Y, _texture.Width, _texture.Height);
             }
+        }
+
+        public Sprite(Dictionary<string, Animation> animations)
+        {
+            _animations = animations;
+            _animationManager = new AnimationManager(_animations.First().Value);
         }
 
         public Sprite(Texture2D texture)
