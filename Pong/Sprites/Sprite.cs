@@ -10,7 +10,7 @@ using System.Text;
 
 namespace Pong.Sprites
 {
-    public class Sprite : ICloneable
+    public class Sprite :  ICloneable
     {
         #region Fields
         protected Texture2D _texture;
@@ -62,11 +62,11 @@ namespace Pong.Sprites
             _texture = texture;
         }
 
-        public virtual void Update(GraphicsDeviceManager _graphics, GameTime gameTime, List<Sprite> sprites) { }
+        public override void Update(GraphicsDeviceManager _graphics, GameTime gameTime, List<Sprite> sprites) { }
 
 
 
-        public virtual void Draw(SpriteBatch _spriteBatch)
+        public override void Draw(SpriteBatch _spriteBatch)
         {
             _spriteBatch.Draw(_texture, _position, null, color, rotation, origin, Vector2.One, SpriteEffects.None, 0f);
         }
@@ -108,6 +108,7 @@ namespace Pong.Sprites
                    this.rectangle.Right > sprite.rectangle.Left &&
                    this.rectangle.Left < sprite.rectangle.Right;
         }
+
 
         #endregion
     }
